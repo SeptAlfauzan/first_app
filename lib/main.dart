@@ -67,7 +67,7 @@ class _RandomWordsState extends State<RandomWords> {
 
   Future<String> fetchAlbum() async {
     final response = await http.get(
-        Uri.encodeFull('https://swapi.dev/api/starships/'),
+        Uri.encodeFull('https://swapi.dev/api/starships'),
         headers: {"Accept": "application/json"});
 
     if (response.statusCode == 200) {
@@ -96,7 +96,7 @@ class _RandomWordsState extends State<RandomWords> {
       padding: const EdgeInsets.all(18),
       itemCount: data == null ? 0 : data.length,
       itemBuilder: (BuildContext _context, int i) {
-        print(data);
+        print(i);
         //add skeleton loading
         // if (data == null) {
         //   return SizedBox(
@@ -106,11 +106,11 @@ class _RandomWordsState extends State<RandomWords> {
         //           child: ListItem(index: -1)));
         // }
 
-        if (i.isOdd) {
-          // Add a one-pixel-high divider widget before each row
-          // in the ListView.
-          return Divider();
-        }
+        // if (i.isOdd) {
+        //   // Add a one-pixel-high divider widget before each row
+        //   // in the ListView.
+        //   return Divider();
+        // }
 
         return _buildRow(data[i]["model"]);
       },
@@ -121,21 +121,26 @@ class _RandomWordsState extends State<RandomWords> {
     //check to ensure that a word pairing has
     //not already been added to favorites
     final alreadySaved = _saved.contains(pair);
-    return ListTile(
-      title: Text(
-        pair,
-        style: _biggerFont,
-      ),
-      trailing: Icon(
-        alreadySaved ? Icons.bookmark : Icons.bookmark_outline,
-        color: alreadySaved ? Colors.black : null,
-      ),
-      onTap: () {
-        //when user clicked on list item
-        setState(() {
-          alreadySaved ? _saved.remove(pair) : _saved.add(pair);
-        });
-      },
+    return Column(
+      children: <Widget>[
+        ListTile(
+          title: Text(
+            pair,
+            style: _biggerFont,
+          ),
+          trailing: Icon(
+            alreadySaved ? Icons.bookmark : Icons.bookmark_outline,
+            color: alreadySaved ? Colors.black : null,
+          ),
+          onTap: () {
+            //when user clicked on list item
+            setState(() {
+              alreadySaved ? _saved.remove(pair) : _saved.add(pair);
+            });
+          },
+        ),
+        Divider(),
+      ],
     );
   }
 
